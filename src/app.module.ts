@@ -6,6 +6,13 @@ import { SeedModule } from './seed/seed.module';
 import { AuthModule } from './auth/auth.module';
 import { ExampleMiddleware } from './common/middleware/example.middleware';
 import { UsersModule } from './users/users.module';
+import { CustomersModule } from './customers/customers.module';
+import { AddressesModule } from './addresses/addresses.module';
+import { VehiclesModule } from './vehicles/vehicles.module';
+import { ContractsModule } from './contracts/contracts.module';
+import { LoansModule } from './loans/loans.module';
+import { PaymentsModule } from './payments/payments.module';
+import { MaintenanceModule } from './maintenance/maintenance.module';
 import typeormConfig from './database/typeorm.config';
 
 
@@ -28,6 +35,13 @@ import typeormConfig from './database/typeorm.config';
     SeedModule,
     AuthModule,
     UsersModule,
+    CustomersModule,
+    AddressesModule,
+    VehiclesModule,
+    ContractsModule,
+    LoansModule,
+    PaymentsModule,
+    MaintenanceModule,
   ],
 
   controllers: [],
