@@ -3,7 +3,7 @@ import { Customer } from "src/customers/entities/customer.entity";
 import { Column, Entity, ManyToOne } from "typeorm";
 
 @Entity({ name: 'addresses' })
-export class Addresses extends BaseEntity { 
+export class Addresses extends BaseEntity {
   @Column('text')
   type: string;
 
@@ -22,7 +22,7 @@ export class Addresses extends BaseEntity {
   @Column('text')
   state: string;
 
-  @Column('text', {name: 'postal_code'})
+  @Column('text', { name: 'postal_code' })
   postalCode: string;
 
   @Column('text')
@@ -32,7 +32,7 @@ export class Addresses extends BaseEntity {
   status: string;
 
   @ManyToOne(
-    () => Customer,
+    (type) => Customer,
     (customer) => customer.addresses,
     { onDelete: 'CASCADE' }
   )

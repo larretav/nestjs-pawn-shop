@@ -1,19 +1,17 @@
 import { Customer } from "src/customers/entities/customer.entity";
-import { Column, Entity, ManyToOne } from "typeorm"
+import { Loan } from "src/loans/entities/loan.entity";
+import { Vehicle } from "src/vehicles/entities/vehicle.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm"
 
 @Entity({ name: 'contracts' })
 export class Contract {
 
-  @Column('decimal', { name: 'loan_amount' })
-  loanAmount: number;
-
-  @Column('decimal', { name: 'interest_rate', default: 0.8 })
-  interestRate: number;
+  @Column('integer', { generated: "increment" })
+  folio: number;
 
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
-  // activo, completado, cancelado
   @Column('text', { name: 'contract_status', nullable: false })
   contractStatus: string;
 
@@ -22,12 +20,26 @@ export class Contract {
 
   // Relations
   @ManyToOne(
-    () => Customer,
+    (type) => Customer,
     (customer) => customer.addresses,
-    { onDelete: 'CASCADE' }
+    { onDelete: 'CASCADE', eager: true }
   )
   customer: Customer;
 
-  @Column('text', { name: 'vehicle_id' })
-  vehicleId: string;
+  @ManyToOne(
+    (type) => Vehicle,
+    (vehicle) => vehicle.contracts,
+    { onDelete: 'CASCADE', eager: true }
+  )
+  vehicle: string;
+
+  @OneToOne(
+    (type) => Loan,
+    (loan) => loan.contract,
+    { onDelete: 'CASCADE', eager: true }
+  )
+  @JoinColumn()
+  loan: string;
+
+
 }
