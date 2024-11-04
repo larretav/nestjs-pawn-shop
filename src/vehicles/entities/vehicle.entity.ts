@@ -14,24 +14,24 @@ export class Vehicle extends BaseEntity {
   model: string;
 
   @Column('smallint', { nullable: false })
-  year: string;
+  year: number;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   condition: string;
 
-  @Column('decimal', { name: 'valuation_amount', nullable: false })
+  @Column('decimal', { name: 'valuation_amount', precision: 10, scale: 2, nullable: false })
   valuationAmount: number;
 
-  @Column('decimal', { name: 'loan_amount', nullable: false })
+  @Column('decimal', { name: 'loan_amount', precision: 10, scale: 2, nullable: false })
   loanAmount: number;
 
-  @Column('decimal', { name: 'maintenance_costs' })
+  @Column('decimal', { name: 'maintenance_costs', precision: 7, scale: 2, nullable: true })
   maintenanceCosts: number;
 
   @Column('timestamp', { name: 'entry_date', default: () => 'CURRENT_TIMESTAMP' })
-  date: Date;
+  entryDate: Date;
 
-  @Column('char', { default: 'A', select: false })
+  @Column('char', { default: 'A', select: false, nullable: false })
   status: string;
 
   // Relations
@@ -47,7 +47,7 @@ export class Vehicle extends BaseEntity {
     (contract) => contract.vehicle,
     { onDelete: 'CASCADE' }
   )
-  contracts: Contract[];
+  contractHistory: Contract[];
 
   @OneToMany(
     () => Maintenance,

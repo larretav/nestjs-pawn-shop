@@ -8,16 +8,16 @@ import { Column, Entity, ManyToOne, OneToMany, OneToOne } from "typeorm";
 @Entity({ name: 'loans' })
 export class Loan {
 
-  @Column('decimal', { name: 'principal_amount' }) // (Monto principal del préstamo).
+  @Column('decimal', { name: 'principal_amount', precision: 10, scale: 2 }) // (Monto principal del préstamo).
   principalAmount: number;
 
-  @Column('decimal', { name: 'interest_rate', default: 0.8}) // (Tasa de interés, 8%).
+  @Column('decimal', { name: 'interest_rate', default: 0.08, precision: 5, scale: 4 }) // (Tasa de interés, 8%).
   interestRate: number;
 
-  @Column('decimal', { name: 'outstanding_balance' }) // (Saldo pendiente, monto principal + interés).
+  @Column('decimal', { name: 'outstanding_balance', precision: 10, scale: 2 }) // (Saldo pendiente, monto principal + interés).
   outstandingBalance: number;
 
-  @Column('decimal', { name: 'monthly_payment' }) // (Pago mensual).
+  @Column('decimal', { name: 'monthly_payment', precision: 10, scale: 2  }) // (Pago mensual).
   monthlyPayment: number;
 
   @Column('char', { default: 'A', select: false })

@@ -28,10 +28,10 @@ export class Contract {
 
   @ManyToOne(
     (type) => Vehicle,
-    (vehicle) => vehicle.contracts,
+    (vehicle) => vehicle.contractHistory,
     { onDelete: 'CASCADE', eager: true }
   )
-  vehicle: string;
+  vehicle: Vehicle;
 
   @OneToOne(
     (type) => Loan,
@@ -39,7 +39,5 @@ export class Contract {
     { onDelete: 'CASCADE', eager: true }
   )
   @JoinColumn()
-  loan: string;
-
-
+  loan: Loan;
 }

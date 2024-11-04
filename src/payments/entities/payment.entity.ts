@@ -5,7 +5,7 @@ import { Column, Entity, ManyToOne } from "typeorm";
 @Entity({ name: 'payments' })
 export class Payment {
 
-  @Column('decimal', { name: 'payment_amount' }) // (Monto pagado).
+  @Column('decimal', { name: 'payment_amount', precision: 10, scale: 2 }) // (Monto pagado).
   paymentAmount: number;
 
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
@@ -14,8 +14,8 @@ export class Payment {
   @Column('boolean', { name: 'is_late' }) // (Indica si el pago fue tardío).
   isLate: boolean;
 
-  @Column('boolean', { name: 'late_fees' }) // (Penalización por retraso, si corresponde).
-  lateFees: boolean;
+  @Column('decimal', { name: 'late_fees', precision: 7, scale: 2 }) // (Penalización por retraso, si corresponde).
+  lateFees: number;
 
   @Column('char', { default: 'A', select: false })
   status: string;
@@ -24,7 +24,7 @@ export class Payment {
   // (Referencia al préstamo).
   @ManyToOne(
     (type) => Loan,
-    (contract) => contract.payments
+    (loan) => loan.payments
   )
   loan: Loan;
 

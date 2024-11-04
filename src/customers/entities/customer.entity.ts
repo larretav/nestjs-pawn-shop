@@ -1,6 +1,7 @@
 import { Addresses } from "src/addresses/entities/address.entity";
 import { BaseEntity } from "src/common/entities/base.entity"
 import { Contract } from "src/contracts/entities/contract.entity";
+import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Column, Entity, OneToMany } from "typeorm"
 
 @Entity({ name: 'customers' })
@@ -47,9 +48,9 @@ export class Customer extends BaseEntity {
 
   // Vehicles
   @OneToMany(
-    (type) => Addresses,
-    (addresses) => addresses.customer,
+    (type) => Vehicle,
+    (vehicle) => vehicle.customer,
     { eager: true, cascade: true }
   )
-  vehicles?: Addresses[];
+  vehicles?: Vehicle[];
 }
