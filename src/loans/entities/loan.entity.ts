@@ -6,7 +6,7 @@ import { Column, Entity, ManyToOne, OneToMany, OneToOne } from "typeorm";
 
 // Prestamos
 @Entity({ name: 'loans' })
-export class Loan {
+export class Loan extends BaseEntity {
 
   @Column('decimal', { name: 'principal_amount', precision: 10, scale: 2 }) // (Monto principal del préstamo).
   principalAmount: number;
@@ -17,7 +17,7 @@ export class Loan {
   @Column('decimal', { name: 'outstanding_balance', precision: 10, scale: 2 }) // (Saldo pendiente, monto principal + interés).
   outstandingBalance: number;
 
-  @Column('decimal', { name: 'monthly_payment', precision: 10, scale: 2  }) // (Pago mensual).
+  @Column('decimal', { name: 'monthly_payment', precision: 10, scale: 2 }) // (Pago mensual).
   monthlyPayment: number;
 
   @Column('char', { default: 'A', select: false })

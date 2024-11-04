@@ -1,10 +1,11 @@
+import { BaseEntity } from "src/common/entities/base.entity";
 import { Customer } from "src/customers/entities/customer.entity";
 import { Loan } from "src/loans/entities/loan.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm"
 
 @Entity({ name: 'contracts' })
-export class Contract {
+export class Contract extends BaseEntity {
 
   @Column('integer', { generated: "increment" })
   folio: number;

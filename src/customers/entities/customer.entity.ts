@@ -35,14 +35,14 @@ export class Customer extends BaseEntity {
   @OneToMany(
     (type) => Contract,
     (contract) => contract.customer,
-    { eager: true, cascade: true }
+    { eager: false, cascade: true }
   )
   contracts?: Contract[];
 
   @OneToMany(
     (type) => Addresses,
     (addresses) => addresses.customer,
-    { eager: true, cascade: true }
+    { eager: false, cascade: true }
   )
   addresses?: Addresses[];
 
@@ -50,7 +50,7 @@ export class Customer extends BaseEntity {
   @OneToMany(
     (type) => Vehicle,
     (vehicle) => vehicle.customer,
-    { eager: true, cascade: true }
+    { eager: false, cascade: true }
   )
   vehicles?: Vehicle[];
 }

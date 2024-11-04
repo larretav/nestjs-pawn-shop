@@ -1,9 +1,10 @@
+import { BaseEntity } from "src/common/entities/base.entity";
 import { Loan } from "src/loans/entities/loan.entity";
 import { Column, Entity, ManyToOne } from "typeorm";
 
 // Pagos
 @Entity({ name: 'payments' })
-export class Payment {
+export class Payment extends BaseEntity {
 
   @Column('decimal', { name: 'payment_amount', precision: 10, scale: 2 }) // (Monto pagado).
   paymentAmount: number;

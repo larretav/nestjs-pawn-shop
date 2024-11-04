@@ -34,7 +34,7 @@ export class Addresses extends BaseEntity {
   @ManyToOne(
     (type) => Customer,
     (customer) => customer.addresses,
-    { onDelete: 'CASCADE' }
+    { onDelete: 'CASCADE',  }
   )
   customer: Customer;
 }

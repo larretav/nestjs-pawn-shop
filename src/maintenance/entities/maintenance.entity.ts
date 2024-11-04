@@ -1,10 +1,11 @@
+import { BaseEntity } from "src/common/entities/base.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Column, Entity, ManyToOne } from "typeorm"
 
 
 // Mantenimiento
 @Entity({ name: 'maintenance' })
-export class Maintenance {
+export class Maintenance extends BaseEntity  {
 
   @Column('text') // Tipo de mantenimiento (reparaciones o limpieza).
   type: string;
