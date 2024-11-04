@@ -7,22 +7,22 @@ import { Column, Entity, ManyToOne, OneToMany } from "typeorm"
 @Entity({ name: 'vehicles' })
 export class Vehicle extends BaseEntity {
 
-  @Column('text', { nullable: false })
+  @Column('text')
   make: string;
 
-  @Column('text', { nullable: false })
+  @Column('text')
   model: string;
 
-  @Column('smallint', { nullable: false })
+  @Column('smallint')
   year: number;
 
   @Column('text', { nullable: true })
   condition: string;
 
-  @Column('decimal', { name: 'valuation_amount', precision: 10, scale: 2, nullable: false })
+  @Column('decimal', { name: 'valuation_amount', precision: 10, scale: 2 })
   valuationAmount: number;
 
-  @Column('decimal', { name: 'loan_amount', precision: 10, scale: 2, nullable: false })
+  @Column('decimal', { name: 'loan_amount', precision: 10, scale: 2 })
   loanAmount: number;
 
   @Column('decimal', { name: 'maintenance_costs', precision: 7, scale: 2, nullable: true })
@@ -31,7 +31,7 @@ export class Vehicle extends BaseEntity {
   @Column('timestamp', { name: 'entry_date', default: () => 'CURRENT_TIMESTAMP' })
   entryDate: Date;
 
-  @Column('char', { default: 'A', select: false, nullable: false })
+  @Column('char', { default: 'A', select: false })
   status: string;
 
   // Relations

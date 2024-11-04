@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Entity, Column, ManyToOne, OneToOne, JoinColumn, OneToMany } from "typeorm";
+import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Entity, Column, ManyToOne, OneToOne, JoinColumn, OneToMany, Index } from "typeorm";
 
 // Base Entity
 export abstract class BaseEntity {
@@ -53,22 +53,23 @@ export class Addresses extends BaseEntity {
   @ManyToOne(
     (type) => Customer,
     (customer) => customer.addresses,
-    { onDelete: 'CASCADE' }
+    { onDelete: 'CASCADE',  }
   )
   customer: Customer;
 }
 
 // Contracts
 @Entity({ name: 'contracts' })
-export class Contract {
+export class Contract extends BaseEntity {
 
+  @Index()
   @Column('integer', { generated: "increment" })
   folio: number;
 
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
-  @Column('text', { name: 'contract_status', nullable: false })
+  @Column('text', { name: 'contract_status' })
   contractStatus: string;
 
   @Column('char', { default: 'A', select: false })
@@ -130,29 +131,30 @@ export class Customer extends BaseEntity {
   @OneToMany(
     (type) => Contract,
     (contract) => contract.customer,
-    { eager: true, cascade: true }
+    { eager: false, cascade: true }
   )
-  contracts?: Contract[];
+  contracts: Contract[];
 
   @OneToMany(
     (type) => Addresses,
     (addresses) => addresses.customer,
-    { eager: true, cascade: true }
+    { eager: false, cascade: true }
   )
-  addresses?: Addresses[];
+  addresses: Addresses[];
 
   // Vehicles
   @OneToMany(
     (type) => Vehicle,
     (vehicle) => vehicle.customer,
-    { eager: true, cascade: true }
+    { eager: false, cascade: true }
   )
-  vehicles?: Vehicle[];
+  vehicles: Vehicle[];
 }
+
 
 // Loan
 @Entity({ name: 'loans' })
-export class Loan {
+export class Loan extends BaseEntity {
 
   @Column('decimal', { name: 'principal_amount', precision: 10, scale: 2 }) // (Monto principal del préstamo).
   principalAmount: number;
@@ -163,7 +165,7 @@ export class Loan {
   @Column('decimal', { name: 'outstanding_balance', precision: 10, scale: 2 }) // (Saldo pendiente, monto principal + interés).
   outstandingBalance: number;
 
-  @Column('decimal', { name: 'monthly_payment' }) // (Pago mensual).
+  @Column('decimal', { name: 'monthly_payment', precision: 10, scale: 2 }) // (Pago mensual).
   monthlyPayment: number;
 
   @Column('char', { default: 'A', select: false })
@@ -181,18 +183,21 @@ export class Loan {
     (payment) => payment.loan,
     { eager: true, cascade: true }
   )
-  payments?: Payment[];
+  payments: Payment[];
 
 }
 
 // Maintenance
 @Entity({ name: 'maintenance' })
-export class Maintenance {
+export class Maintenance extends BaseEntity  {
+
+  @Column('text') // Tipo de mantenimiento (reparaciones o limpieza).
+  type: string;
 
   @Column('text') // (Descripción del mantenimiento realizado(ej. "Reparación de llanta")).
   description: string;
 
-  @Column('decimal') //(Costo del mantenimiento).
+  @Column('decimal', { precision: 10, scale: 2 }) //(Costo del mantenimiento).
   cost: number;
 
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })  //(Fecha en la que se realizó el mantenimiento).
@@ -200,7 +205,7 @@ export class Maintenance {
 
   @Column('char', { default: 'A', select: false })
   status: string;
-  
+
   @ManyToOne(
     () => Vehicle,
     (vehicle) => vehicle.maintenance,
@@ -212,7 +217,7 @@ export class Maintenance {
 
 // Payment
 @Entity({ name: 'payments' })
-export class Payment {
+export class Payment extends BaseEntity {
 
   @Column('decimal', { name: 'payment_amount', precision: 10, scale: 2 }) // (Monto pagado).
   paymentAmount: number;
@@ -239,29 +244,30 @@ export class Payment {
 
 }
 
+
 // Vehicle
 @Entity({ name: 'vehicles' })
 export class Vehicle extends BaseEntity {
 
-  @Column('text', { nullable: false })
+  @Column('text')
   make: string;
 
-  @Column('text', { nullable: false })
+  @Column('text')
   model: string;
 
-  @Column('smallint', { nullable: false })
-  year: string;
+  @Column('smallint')
+  year: number;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   condition: string;
 
-  @Column('decimal', { name: 'valuation_amount', nullable: false })
+  @Column('decimal', { name: 'valuation_amount', precision: 10, scale: 2 })
   valuationAmount: number;
 
-  @Column('decimal', { name: 'loan_amount', precision: 10, scale: 2, nullable: false })
+  @Column('decimal', { name: 'loan_amount', precision: 10, scale: 2 })
   loanAmount: number;
 
-  @Column('decimal', { name: 'maintenance_costs', precision: 7, scale: 2 })
+  @Column('decimal', { name: 'maintenance_costs', precision: 7, scale: 2, nullable: true })
   maintenanceCosts: number;
 
   @Column('timestamp', { name: 'entry_date', default: () => 'CURRENT_TIMESTAMP' })
@@ -293,3 +299,4 @@ export class Vehicle extends BaseEntity {
   maintenance: Maintenance[];
 
 }
+

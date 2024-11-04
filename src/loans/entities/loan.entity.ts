@@ -35,6 +35,6 @@ export class Loan extends BaseEntity {
     (payment) => payment.loan,
     { eager: true, cascade: true }
   )
-  payments?: Payment[];
+  payments: Payment[];
 
 }

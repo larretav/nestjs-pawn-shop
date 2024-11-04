@@ -2,18 +2,19 @@ import { BaseEntity } from "src/common/entities/base.entity";
 import { Customer } from "src/customers/entities/customer.entity";
 import { Loan } from "src/loans/entities/loan.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm"
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne } from "typeorm"
 
 @Entity({ name: 'contracts' })
 export class Contract extends BaseEntity {
 
+  @Index()
   @Column('integer', { generated: "increment" })
   folio: number;
 
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
-  @Column('text', { name: 'contract_status', nullable: false })
+  @Column('text', { name: 'contract_status' })
   contractStatus: string;
 
   @Column('char', { default: 'A', select: false })
