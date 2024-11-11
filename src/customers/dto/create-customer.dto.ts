@@ -34,8 +34,6 @@ export class CreateCustomerDto {
 
   // Relations
   contracts: string;
-
   addresses: string;
-
   vehicles: string;
 }

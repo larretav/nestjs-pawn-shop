@@ -31,7 +31,7 @@ export class Customer extends BaseEntity {
   @Column('char', { default: 'A', select: false })
   status: string;
 
-  // Relatios
+  // Relations
   @OneToMany(
     (type) => Contract,
     (contract) => contract.customer,
