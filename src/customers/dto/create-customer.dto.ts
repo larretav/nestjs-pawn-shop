@@ -31,9 +31,4 @@ export class CreateCustomerDto {
   @IsNotEmpty({ message: '[idNumber] no debe ser vacío' })
   @IsString({ message: '[idNumber] debe ser una cadena' })
   idNumber: string;
-
-  // Relations
-  contracts: string;
-  addresses: string;
-  vehicles: string;
 }

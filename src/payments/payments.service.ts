@@ -1,11 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Payment } from './entities/payment.entity';
+import { Repository } from 'typeorm';
+import { HandleExceptions } from 'src/common/exceptions/handleExceptions';
 
 @Injectable()
 export class PaymentsService {
+
+  constructor(
+    @InjectRepository(Payment)
+    private readonly paymentRepository: Repository<Payment>
+  ) { }
+
   create(createPaymentDto: CreatePaymentDto) {
-    return 'This action adds a new payment';
+    try {
+      // const vehicle = this.vehicleRepository.create(createVehicleDto);
+      // await this.vehicleRepository.insert(vehicle);
+
+      // return vehicle;
+      return createPaymentDto;
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
   findAll() {

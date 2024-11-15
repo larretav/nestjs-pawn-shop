@@ -1,11 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLoanDto } from './dto/create-loan.dto';
 import { UpdateLoanDto } from './dto/update-loan.dto';
+import { HandleExceptions } from 'src/common/exceptions/handleExceptions';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Loan } from './entities/loan.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class LoansService {
+
+  constructor(
+    @InjectRepository(Loan)
+    private readonly loanRepository: Repository<Loan>
+  ) { }
+
   create(createLoanDto: CreateLoanDto) {
-    return 'This action adds a new loan';
+    try {
+      // const vehicle = this.vehicleRepository.create(createVehicleDto);
+      // await this.vehicleRepository.insert(vehicle);
+
+      // return vehicle;
+      return createLoanDto;
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
   findAll() {

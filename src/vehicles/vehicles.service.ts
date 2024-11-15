@@ -1,11 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
+import { HandleExceptions } from 'src/common/exceptions/handleExceptions';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Vehicle } from './entities/vehicle.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class VehiclesService {
-  create(createVehicleDto: CreateVehicleDto) {
-    return 'This action adds a new vehicle';
+
+  constructor(
+    @InjectRepository(Vehicle)
+    private readonly vehicleRepository: Repository<Vehicle>
+  ) { }
+
+  async create(createVehicleDto: CreateVehicleDto) {
+    try {
+      // const vehicle = this.vehicleRepository.create(createVehicleDto);
+      // await this.vehicleRepository.insert(vehicle);
+
+      // return vehicle;
+      return createVehicleDto;
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
   findAll() {
