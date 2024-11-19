@@ -21,6 +21,10 @@ export class CreateAddressDto {
   city: string;
 
   @IsNotEmpty()
+  @IsString({ message: '[municipality] debe ser un string' })
+  municipality: string;
+
+  @IsNotEmpty()
   @IsString({ message: '[state] debe ser un string' })
   state: string;
 

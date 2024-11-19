@@ -25,9 +25,6 @@ export class Vehicle extends BaseEntity {
   @Column('decimal', { name: 'loan_amount', precision: 10, scale: 2 })
   loanAmount: number;
 
-  @Column('decimal', { name: 'maintenance_costs', precision: 7, scale: 2, nullable: true })
-  maintenanceCosts: number;
-
   @Column('timestamp', { name: 'entry_date', default: () => 'CURRENT_TIMESTAMP' })
   entryDate: Date;
 

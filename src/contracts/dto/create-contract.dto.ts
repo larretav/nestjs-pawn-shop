@@ -1,4 +1,8 @@
-import { IsISO8601, IsNotEmpty, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsISO8601, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
+import { CreateCustomerDto } from "src/customers/dto/create-customer.dto";
+import { CreateLoanDto } from "src/loans/dto/create-loan.dto";
+import { CreateVehicleDto } from "src/vehicles/dto/create-vehicle.dto";
 
 export class CreateContractDto {
 
@@ -11,8 +15,19 @@ export class CreateContractDto {
   contractStatus: string;
 
   // Relations
-  customer: string;
-  vehicle: string;
-  loan: string;
+  @IsNotEmpty({ message: '[customer] no debe ser vacío.' })
+  @ValidateNested()
+  @Type(() => CreateCustomerDto)
+  customer: CreateCustomerDto;
+
+  @IsNotEmpty({ message: '[vehicle] no debe ser vacío.' })
+  @ValidateNested()
+  @Type(() => CreateVehicleDto)
+  vehicle: CreateVehicleDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateLoanDto)
+  loan?: CreateLoanDto;
 }
 
