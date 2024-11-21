@@ -1,11 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import {  HttpException, Injectable } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Addresses } from './entities/address.entity';
+import { HandleExceptions } from 'src/common/exceptions/handleExceptions';
 
 @Injectable()
 export class AddressesService {
-  create(createAddressDto: CreateAddressDto) {
-    return 'This action adds a new address';
+
+  constructor(
+    @InjectRepository(Addresses)
+    private readonly addressRepository: Repository<Addresses>,
+  ) { }
+
+
+  async create(createAddressDto: CreateAddressDto) {
+    try {      
+      await this.addressRepository.insert(createAddressDto);    
+      return createAddressDto
+
+    } catch (error) {
+      console.log(error)
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
   findAll() {

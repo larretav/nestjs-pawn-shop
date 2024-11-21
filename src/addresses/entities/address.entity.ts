@@ -13,7 +13,7 @@ export class Addresses extends BaseEntity {
   @Column('text')
   number: string;
 
-  @Column('text',)
+  @Column('text')
   neighborhood: string;
 
   @Column('text')
