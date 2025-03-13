@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,33 +14,88 @@ export class CustomersService {
     private readonly customerRepository: Repository<Customer>
   ) { }
 
-  create(createCustomerDto: CreateCustomerDto) {
+  async create(createCustomerDto: CreateCustomerDto) {
 
     try {
-      // const vehicle = this.vehicleRepository.create(createVehicleDto);
-      // await this.vehicleRepository.insert(vehicle);
+      const customer = await this.findByCURP(createCustomerDto.curp);
 
-      // return vehicle;
-      return createCustomerDto;
+      if (customer)
+        throw new BadRequestException('Ya existe un cliente con esa CURP');
+
+      const newCustomer = this.customerRepository.create(createCustomerDto);
+      await this.customerRepository.insert(newCustomer);
+
+      return newCustomer;
     } catch (error) {
       const exception = new HandleExceptions();
       exception.handleExceptions(error);
     }
   }
 
-  findAll() {
-    return `This action returns all customers`;
+  async findAll() {
+    try {
+      const customers = await this.customerRepository.find({
+        where: { status: 'A' },
+        relations: {
+          addresses: true
+        }
+      })
+      return customers;
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
+  async findOne(id: string) {
+    try {
+      const customer = await this.customerRepository.findOne({ where: { id, status: 'A' } });
+
+      if (!customer)
+        throw new NotFoundException('Cliente no encontrado')
+
+      return customer
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
+  async update(id: string, updateCustomerDto: UpdateCustomerDto) {
+    try {
+      await this.findOne(id);
+      await this.customerRepository.update({ id }, updateCustomerDto);
+
+      return 'Reporte actualizado correctamente';
+
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} customer`;
+  async remove(id: string) {
+    try {
+      await this.findOne(id);
+      await this.customerRepository.update({ id }, { status: 'I' });
+
+      return 'Cliente eliminado correctamente';
+
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
+
+  async findByCURP(curp: string) {
+    try {
+      const customer = await this.customerRepository.findOne({ where: { curp, status: 'A' } });
+
+      return customer
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
+  }
+
 }

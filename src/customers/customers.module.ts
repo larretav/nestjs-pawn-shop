@@ -12,5 +12,8 @@ import { Customer } from './entities/customer.entity';
       Customer, 
     ])
   ],
+  exports: [
+    CustomersService
+  ]
 })
 export class CustomersModule {}
