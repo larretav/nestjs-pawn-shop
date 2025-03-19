@@ -25,4 +25,12 @@ export const usersDataTest: CreateUserDto[] = [
     password: "jfrausto123",
     role: "admin",
   },
+  {
+    firstName: "Oscar",
+    lastName: "Osorio",
+    email: "oosorio@gmail.com",
+    userName: "oosorio",
+    password: "oosorio123",
+    role: "admin",
+  },
 ] 

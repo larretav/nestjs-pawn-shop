@@ -6,6 +6,9 @@ import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 import { usersDataTest } from './data/users-data';
 import { AdminCredentials } from './interfaces/admin-cred.interface';
+import { CustomersService } from 'src/customers/customers.service';
+import { customersDataTest } from './data/customers-data';
+import { Customer } from 'src/customers/entities/customer.entity';
 
 @Injectable()
 export class SeedService {
@@ -16,6 +19,10 @@ export class SeedService {
     private readonly usersRepository: Repository<User>,
     private readonly usersService: UsersService,
 
+    @InjectRepository(User)
+    private readonly customersRepository: Repository<Customer>,
+    private readonly customersService: CustomersService,
+
   ) { }
 
 
@@ -23,9 +30,12 @@ export class SeedService {
   async runSeed() {
 
     try {
+      debugger
       this.usersRepository.delete({});
+      this.customersRepository.delete({});
 
-      await this.intertUsers();
+      await this.insertUsers();
+      await this.insertCustomers();
 
       return 'Seed excecuted';
 
@@ -36,7 +46,7 @@ export class SeedService {
   }
 
 
-  private async intertUsers() {
+  private async insertUsers() {
     try {
       const userPromises = usersDataTest.map(user => {
         return this.usersService.create(user)
@@ -67,6 +77,18 @@ export class SeedService {
       })
 
       return 'Usuario Admin creado'
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async insertCustomers() {
+    try {
+      const customerPromises = customersDataTest.map(customer => {
+        return this.customersService.create(customer)
+      });
+
+      await Promise.all(customerPromises)
     } catch (error) {
       throw error;
     }

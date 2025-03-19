@@ -3,7 +3,7 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from './entities/customer.entity';
-import { Like, Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 import { HandleExceptions } from 'src/common/exceptions/handleExceptions';
 
 @Injectable()
@@ -99,8 +99,8 @@ export class CustomersService {
     try {
       const results = await this.customerRepository.find({
         where: [
-          { firstName: Like(`%${term}%`), status: 'A' },
-          { lastName: Like(`%${term}%`), status: 'A' }
+          { firstName: ILike(`%${term}%`), status: 'A' },
+          { lastName: ILike(`%${term}%`), status: 'A' }
         ]
       })
 
