@@ -3,28 +3,37 @@ import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomersService } from 'src/customers/customers.service';
+import { VehiclesService } from 'src/vehicles/vehicles.service';
 
 @Injectable()
 export class ContractsService {
 
-    constructor(
-      // @InjectRepository(Addresses)
-      // private readonly addressRepository: Repository<Addresses>,
+  constructor(
+    // @InjectRepository(Addresses)
+    // private readonly addressRepository: Repository<Addresses>,
 
-      private readonly customerService: CustomersService,
-    ) { }
+    private readonly customerService: CustomersService,
+    private readonly vehicleService: VehiclesService,
+  ) { }
 
-  create(createContractDto: CreateContractDto) {
-    // const { folio, date, contractStatus, customer, vehicle, loan } = createContractDto;
+  async create(createContractDto: CreateContractDto) {
+    const { date, contractStatus, customer, vehicle, loan, address } = createContractDto;
 
-    // // Crear o buscar cliente
-    // let customerEntity = await this.customerRepository.findOne({ where: { curp: customer.curp } });
-    // if (!customerEntity) {
-    //   customerEntity = this.customerRepository.create(customer);
-    //   customerEntity = await this.customerRepository.save(customerEntity);
-    // }
+    // Crear o buscar cliente
+    let customerEntity = await this.customerService.findByCURP(customer.curp);
+    if (!customerEntity) 
+      customerEntity = await this.customerService.create(customer);
 
-    // // Crear o buscar vehículo
+    // Crear dirección
+  
+
+    // Crear o buscar vehículo
+
+    // Crear préstamo
+
+    // Crear contrato
+    
+
     // let vehicleEntity = await this.vehicleRepository.findOne({
     //   where: { make: vehicle.make, model: vehicle.model, year: vehicle.year },
     // });

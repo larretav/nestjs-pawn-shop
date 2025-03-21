@@ -12,5 +12,8 @@ import { Vehicle } from './entities/vehicle.entity';
       Vehicle, 
     ])
   ],
+  exports: [
+    VehiclesService
+  ]
 })
 export class VehiclesModule {}
