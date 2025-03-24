@@ -4,6 +4,7 @@ import { UpdateContractDto } from './dto/update-contract.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomersService } from 'src/customers/customers.service';
 import { VehiclesService } from 'src/vehicles/vehicles.service';
+import { AddressesService } from 'src/addresses/addresses.service';
 
 @Injectable()
 export class ContractsService {
@@ -14,6 +15,7 @@ export class ContractsService {
 
     private readonly customerService: CustomersService,
     private readonly vehicleService: VehiclesService,
+    private readonly addressService: AddressesService,
   ) { }
 
   async create(createContractDto: CreateContractDto) {
@@ -21,18 +23,20 @@ export class ContractsService {
 
     // Crear o buscar cliente
     let customerEntity = await this.customerService.findByCURP(customer.curp);
-    if (!customerEntity) 
+    if (!customerEntity)
       customerEntity = await this.customerService.create(customer);
 
     // Crear dirección
-  
+    let addressEntity = address.id ? await this.addressService.findById(address.id) : null;
+    if (!addressEntity)
+      addressEntity = await this.addressService.create(address)
 
     // Crear o buscar vehículo
 
     // Crear préstamo
 
     // Crear contrato
-    
+
 
     // let vehicleEntity = await this.vehicleRepository.findOne({
     //   where: { make: vehicle.make, model: vehicle.model, year: vehicle.year },

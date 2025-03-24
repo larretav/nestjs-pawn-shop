@@ -111,4 +111,22 @@ export class CustomersService {
     }
   }
 
+  async getVehicles(id: string) {
+    try {
+      const results = await this.customerRepository.findOne({
+        where: { id, status: 'A' },
+        relations: {
+          vehicles: true
+        }
+      })
+
+      return results.vehicles;
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
+  }
+
+
+
 }

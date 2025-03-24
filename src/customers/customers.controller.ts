@@ -22,6 +22,11 @@ export class CustomersController {
     return this.customersService.findByNames(term);
   }
 
+  @Get(':id/vehicles')
+  getVehicles(@Param('id', ParseUUIDPipe) id: string) {
+    return this.customersService.getVehicles(id)
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.customersService.findOne(id);

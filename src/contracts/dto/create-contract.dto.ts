@@ -5,6 +5,11 @@ import { CreateCustomerDto } from "src/customers/dto/create-customer.dto";
 import { CreateLoanDto } from "src/loans/dto/create-loan.dto";
 import { CreateVehicleDto } from "src/vehicles/dto/create-vehicle.dto";
 
+class ExtendedCreateAddressDto extends CreateAddressDto {
+  @IsOptional()
+  id?: string
+}
+
 export class CreateContractDto {
 
   @IsNotEmpty({ message: '[date] no debe ser vacío.' })
@@ -23,8 +28,8 @@ export class CreateContractDto {
 
   @IsNotEmpty({ message: '[address] no debe ser vacío.' })
   @ValidateNested()
-  @Type(() => CreateAddressDto)
-  address: CreateAddressDto
+  @Type(() => ExtendedCreateAddressDto)
+  address: ExtendedCreateAddressDto
 
   @IsNotEmpty({ message: '[vehicle] no debe ser vacío.' })
   @ValidateNested()

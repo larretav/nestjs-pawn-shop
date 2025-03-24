@@ -1,6 +1,7 @@
 import { IsIn, IsNotEmpty, IsOptional, IsString } from "class-validator"
 
 export class CreateAddressDto {
+
   @IsNotEmpty()
   @IsIn(['casa', 'oficina', 'trabajo'], { message: '[type] debe ser casa, oficina o trabajo' })
   type: string;
