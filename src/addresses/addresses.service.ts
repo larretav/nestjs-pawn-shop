@@ -17,11 +17,12 @@ export class AddressesService {
 
   async create(createAddressDto: CreateAddressDto) {
     try {
-      await this.addressRepository.insert(createAddressDto);
-      return createAddressDto
+      const newAddress = this.addressRepository.create(createAddressDto);
+      const addressBd = await this.addressRepository.save(newAddress)
+
+      return addressBd
 
     } catch (error) {
-      console.log(error)
       const exception = new HandleExceptions();
       exception.handleExceptions(error);
     }
