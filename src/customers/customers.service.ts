@@ -63,7 +63,7 @@ export class CustomersService {
       await this.findOne(id);
       await this.customerRepository.update({ id }, updateCustomerDto);
 
-      return 'Reporte actualizado correctamente';
+      return 'Cliente actualizado correctamente';
 
     } catch (error) {
       const exception = new HandleExceptions();
@@ -126,7 +126,5 @@ export class CustomersService {
       exception.handleExceptions(error);
     }
   }
-
-
 
 }

@@ -28,13 +28,11 @@ export class ContractsService {
 
     // Crear dirección
     let addressEntity = address.id ? await this.addressService.findById(address.id) : null;
-    if (!addressEntity) {
-      addressEntity = await this.addressService.create(address);
-      addressEntity.customer = customerEntity;
-      await this
-    }
+    if (!addressEntity)
+      addressEntity = await this.addressService.create({ ...address, customer });
 
     // Crear o buscar vehículo
+      
 
     // Crear préstamo
 

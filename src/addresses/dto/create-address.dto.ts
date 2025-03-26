@@ -1,4 +1,6 @@
-import { IsIn, IsNotEmpty, IsOptional, IsString } from "class-validator"
+import { Type } from "class-transformer";
+import { IsIn, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator"
+import { CreateCustomerDto } from "src/customers/dto/create-customer.dto";
 
 export class CreateAddressDto {
 
@@ -6,7 +8,7 @@ export class CreateAddressDto {
   @IsIn(['casa', 'oficina', 'trabajo'], { message: '[type] debe ser casa, oficina o trabajo' })
   type: string;
 
-  @IsNotEmpty({message:'[street] no debe ser vacía' })
+  @IsNotEmpty({ message: '[street] no debe ser vacía' })
   @IsString({ message: '[street] debe ser un string' })
   street: string;
 
@@ -14,27 +16,32 @@ export class CreateAddressDto {
   @IsString({ message: '[number] debe ser un string' })
   number: string;
 
-  @IsNotEmpty({message:'[neighborhood] no debe ser vacía' })
+  @IsNotEmpty({ message: '[neighborhood] no debe ser vacía' })
   @IsString({ message: '[neighborhood] debe ser un string' })
   neighborhood?: string;
 
-  @IsNotEmpty({message:'[city] no debe ser vacía' })
+  @IsNotEmpty({ message: '[city] no debe ser vacía' })
   @IsString({ message: '[city] debe ser un string' })
   city: string;
 
-  @IsNotEmpty({message:'[municipality] no debe ser vacía' })
+  @IsNotEmpty({ message: '[municipality] no debe ser vacía' })
   @IsString({ message: '[municipality] debe ser un string' })
   municipality: string;
 
-  @IsNotEmpty({message:'[state] no debe ser vacía' })
+  @IsNotEmpty({ message: '[state] no debe ser vacía' })
   @IsString({ message: '[state] debe ser un string' })
   state: string;
 
-  @IsNotEmpty({message:'[postalCode] no debe ser vacía' })
+  @IsNotEmpty({ message: '[postalCode] no debe ser vacía' })
   @IsString({ message: '[postalCode] debe ser un string' })
   postalCode: string;
 
-  @IsNotEmpty({message:'[country] no debe ser vacía' })
+  @IsNotEmpty({ message: '[country] no debe ser vacía' })
   @IsString({ message: '[country] debe ser un string' })
   country: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateCustomerDto)
+  customer?: CreateCustomerDto;
 }
