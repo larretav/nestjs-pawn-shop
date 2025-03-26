@@ -53,12 +53,34 @@ export class VehiclesService {
     }
   }
 
-  update(id: number, updateVehicleDto: UpdateVehicleDto) {
-    return `This action updates a #${id} vehicle`;
+  async update(id: string, updateVehicleDto: UpdateVehicleDto) {
+    try {
+
+      await this.findOne(id);
+
+      await this.vehicleRepository.update({ id }, updateVehicleDto);
+
+      return { message: 'Vehículo actualizado correctamente' };
+
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} vehicle`;
+  async remove(id: string) {
+    try {
+
+      await this.findOne(id);
+
+      await this.vehicleRepository.update({ id }, { status: 'I' });
+
+      return { message: 'Vehículo eliminado correctamente' };
+
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
   async findByTerm(term: string) {

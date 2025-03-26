@@ -23,12 +23,12 @@ export class VehiclesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVehicleDto: UpdateVehicleDto) {
-    return this.vehiclesService.update(+id, updateVehicleDto);
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateVehicleDto: UpdateVehicleDto) {
+    return this.vehiclesService.update(id, updateVehicleDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.vehiclesService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.vehiclesService.remove(id);
   }
 }
