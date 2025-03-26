@@ -12,5 +12,6 @@ import { Addresses } from './entities/address.entity';
       Addresses
     ])
   ],
+  exports: [AddressesService]
 })
-export class AddressesModule {}
+export class AddressesModule { }

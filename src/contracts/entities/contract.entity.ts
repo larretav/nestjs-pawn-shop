@@ -1,3 +1,4 @@
+import { Addresses } from "src/addresses/entities/address.entity";
 import { BaseEntity } from "src/common/entities/base.entity";
 import { Customer } from "src/customers/entities/customer.entity";
 import { Loan } from "src/loans/entities/loan.entity";
@@ -42,4 +43,11 @@ export class Contract extends BaseEntity {
   )
   @JoinColumn()
   loan: Loan;
+
+  @ManyToOne(
+    (type) => Addresses,
+    (addresses) => addresses.contractHistory,
+    { eager: false, cascade: true }
+  )
+  address: Addresses;
 }

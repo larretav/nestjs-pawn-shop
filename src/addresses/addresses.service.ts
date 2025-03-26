@@ -1,4 +1,4 @@
-import {  HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,12 +16,13 @@ export class AddressesService {
 
 
   async create(createAddressDto: CreateAddressDto) {
-    try {      
-      await this.addressRepository.insert(createAddressDto);    
-      return createAddressDto
+    try {
+      const newAddress = this.addressRepository.create(createAddressDto);
+      const addressBd = await this.addressRepository.save(newAddress)
+
+      return addressBd
 
     } catch (error) {
-      console.log(error)
       const exception = new HandleExceptions();
       exception.handleExceptions(error);
     }
@@ -31,8 +32,30 @@ export class AddressesService {
     return `This action returns all addresses`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} address`;
+  async findOne(id: string) {
+    try {
+      const address = await this.findById(id);
+
+      if (!address)
+        throw new NotFoundException('Cliente no encontrado');
+
+      return address;
+
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
+  }
+
+  async findById(id: string) {
+    try {
+      const address = await this.addressRepository.findOne({ where: { id } });
+      return address;
+
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
   update(id: number, updateAddressDto: UpdateAddressDto) {

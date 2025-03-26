@@ -1,6 +1,7 @@
 import { BaseEntity } from "src/common/entities/base.entity";
+import { Contract } from "src/contracts/entities/contract.entity";
 import { Customer } from "src/customers/entities/customer.entity";
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 
 @Entity({ name: 'addresses' })
 export class Addresses extends BaseEntity {
@@ -34,7 +35,14 @@ export class Addresses extends BaseEntity {
   @ManyToOne(
     (type) => Customer,
     (customer) => customer.addresses,
-    { onDelete: 'CASCADE',  }
+    { onDelete: 'CASCADE', }
   )
   customer: Customer;
+
+  @OneToMany(
+    () => Contract,
+    (contract) => contract.address,
+    { onDelete: 'CASCADE' }
+  )
+  contractHistory: Contract[];
 }
