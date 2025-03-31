@@ -10,6 +10,11 @@ class ExtendedCreateAddressDto extends CreateAddressDto {
   id?: string
 }
 
+class ExtendedCreateCustomerDto extends CreateCustomerDto {
+  @IsOptional()
+  id?: string
+}
+
 export class CreateContractDto {
 
   @IsNotEmpty({ message: '[date] no debe ser vacío.' })
@@ -23,8 +28,8 @@ export class CreateContractDto {
   // Relations
   @IsNotEmpty({ message: '[customer] no debe ser vacío.' })
   @ValidateNested()
-  @Type(() => CreateCustomerDto)
-  customer: CreateCustomerDto;
+  @Type(() => ExtendedCreateCustomerDto)
+  customer: ExtendedCreateCustomerDto;
 
   @IsNotEmpty({ message: '[address] no debe ser vacío.' })
   @ValidateNested()
