@@ -1,17 +1,32 @@
 import { Type } from "class-transformer";
-import { IsISO8601, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsISO8601, IsNotEmpty, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
 import { CreateAddressDto } from "src/addresses/dto/create-address.dto";
 import { CreateCustomerDto } from "src/customers/dto/create-customer.dto";
 import { CreateLoanDto } from "src/loans/dto/create-loan.dto";
 import { CreateVehicleDto } from "src/vehicles/dto/create-vehicle.dto";
 
-class ExtendedCreateAddressDto extends CreateAddressDto {
-  @IsOptional()
-  id?: string
-}
 
 class ExtendedCreateCustomerDto extends CreateCustomerDto {
   @IsOptional()
+  @IsUUID()
+  id?: string
+}
+
+class ExtendedCreateAddressDto extends CreateAddressDto {
+  @IsOptional()
+  @IsUUID()
+  id?: string
+}
+
+class ExtendedCreateVehicleDto extends CreateVehicleDto {
+  @IsOptional()
+  @IsUUID()
+  id?: string
+}
+
+class ExtendedCreateLoanDto extends CreateLoanDto {
+  @IsOptional()
+  @IsUUID()
   id?: string
 }
 
@@ -38,12 +53,12 @@ export class CreateContractDto {
 
   @IsNotEmpty({ message: '[vehicle] no debe ser vacío.' })
   @ValidateNested()
-  @Type(() => CreateVehicleDto)
-  vehicle: CreateVehicleDto;
+  @Type(() => ExtendedCreateVehicleDto)
+  vehicle: ExtendedCreateVehicleDto;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => CreateLoanDto)
-  loan?: CreateLoanDto;
+  @Type(() => ExtendedCreateLoanDto)
+  loan?: ExtendedCreateLoanDto;
 }
 
