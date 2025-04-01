@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from './entities/customer.entity';
 import { ILike, Like, Repository } from 'typeorm';
 import { HandleExceptions } from 'src/common/exceptions/handleExceptions';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class CustomersService {
@@ -17,7 +18,7 @@ export class CustomersService {
   async create(createCustomerDto: CreateCustomerDto) {
 
     try {
-      const customer = await this.findByCURP(createCustomerDto.curp);
+      const customer = await this.findByIdCURP(createCustomerDto.curp);
 
       if (customer)
         throw new BadRequestException('Ya existe un cliente con esa CURP');
@@ -84,11 +85,16 @@ export class CustomersService {
     }
   }
 
-  async findByCURP(curp: string) {
-    try {
-      const customer = await this.customerRepository.findOne({ where: { curp, status: 'A' } });
+  async findByIdCURP(term: string): Promise<Customer | null> {
 
-      return customer
+    if (!term) return null;
+    
+    try {
+      const propName = isUUID(term) ? 'id' : 'curp';
+
+      const customer = await this.customerRepository.findOne({ where: { [propName]: term, status: 'A' } });
+
+      return customer;
     } catch (error) {
       const exception = new HandleExceptions();
       exception.handleExceptions(error);

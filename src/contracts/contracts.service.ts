@@ -22,17 +22,21 @@ export class ContractsService {
     const { date, contractStatus, customer, vehicle, loan, address } = createContractDto;
 
     // Crear o buscar cliente
-    let customerEntity = await this.customerService.findByCURP(customer.curp);
+    let customerEntity = await this.customerService.findByIdCURP(customer.id);
     if (!customerEntity)
       customerEntity = await this.customerService.create(customer);
 
     // Crear dirección
-    let addressEntity = address.id ? await this.addressService.findById(address.id) : null;
+    let addressEntity = await this.addressService.findById(address.id);
     if (!addressEntity)
       addressEntity = await this.addressService.create({ ...address, customer });
 
+
+
+
+
     // Crear o buscar vehículo
-      
+
 
     // Crear préstamo
 

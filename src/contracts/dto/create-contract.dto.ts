@@ -8,25 +8,25 @@ import { CreateVehicleDto } from "src/vehicles/dto/create-vehicle.dto";
 
 class ExtendedCreateCustomerDto extends CreateCustomerDto {
   @IsOptional()
-  @IsUUID()
+  // @IsUUID(undefined, {message: "Se esperaba un uuid"})
   id?: string
 }
 
 class ExtendedCreateAddressDto extends CreateAddressDto {
   @IsOptional()
-  @IsUUID()
+  @IsUUID(undefined, {message: "Se esperaba un uuid"})
   id?: string
 }
 
 class ExtendedCreateVehicleDto extends CreateVehicleDto {
   @IsOptional()
-  @IsUUID()
+  @IsUUID(undefined, {message: "Se esperaba un uuid"})
   id?: string
 }
 
 class ExtendedCreateLoanDto extends CreateLoanDto {
   @IsOptional()
-  @IsUUID()
+  @IsUUID(undefined, {message: "Se esperaba un uuid"})
   id?: string
 }
 

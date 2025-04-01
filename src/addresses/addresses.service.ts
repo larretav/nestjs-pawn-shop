@@ -28,8 +28,16 @@ export class AddressesService {
     }
   }
 
-  findAll() {
-    return `This action returns all addresses`;
+  async findAll() {
+    try {
+      const addressess = await this.addressRepository.find({
+        where: { status: 'A' },
+      })
+      return addressess;
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
   async findOne(id: string) {
@@ -47,7 +55,10 @@ export class AddressesService {
     }
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<Addresses | null> {
+
+    if (!id) return null;
+
     try {
       const address = await this.addressRepository.findOne({ where: { id } });
       return address;
