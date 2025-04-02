@@ -1,4 +1,4 @@
-import { Addresses } from "src/addresses/entities/address.entity";
+import { Address } from "src/addresses/entities/address.entity";
 import { BaseEntity } from "src/common/entities/base.entity"
 import { Contract } from "src/contracts/entities/contract.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
@@ -40,11 +40,11 @@ export class Customer extends BaseEntity {
   contracts: Contract[];
 
   @OneToMany(
-    (type) => Addresses,
+    (type) => Address,
     (addresses) => addresses.customer,
     { eager: false, cascade: true }
   )
-  addresses: Addresses[];
+  addresses: Address[];
 
   // Vehicles
   @OneToMany(

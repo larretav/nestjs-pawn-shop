@@ -3,8 +3,8 @@ import { Contract } from "src/contracts/entities/contract.entity";
 import { Customer } from "src/customers/entities/customer.entity";
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 
-@Entity({ name: 'addresses' })
-export class Addresses extends BaseEntity {
+@Entity({ name: 'address' })
+export class Address extends BaseEntity {
   @Column('text')
   type: string;
 

@@ -14,8 +14,8 @@ export class ContractsService {
     // private readonly addressRepository: Repository<Addresses>,
 
     private readonly customerService: CustomersService,
-    private readonly vehicleService: VehiclesService,
     private readonly addressService: AddressesService,
+    private readonly vehicleService: VehiclesService,
   ) { }
 
   async create(createContractDto: CreateContractDto) {
@@ -29,13 +29,12 @@ export class ContractsService {
     // Crear dirección
     let addressEntity = await this.addressService.findById(address.id);
     if (!addressEntity)
-      addressEntity = await this.addressService.create({ ...address, customer });
-
-
-
-
+      addressEntity = await this.addressService.create({ ...address, customerId: customerEntity.id });
 
     // Crear o buscar vehículo
+    // let vehicleEntity = await this.vehicleService.findByTerm(address.id);
+    // if (!vehicleEntity)
+    //   vehicleEntity = await this.vehicleService.create();
 
 
     // Crear préstamo

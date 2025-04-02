@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator"
-import { Addresses } from "src/addresses/entities/address.entity";
+import { Address } from "src/addresses/entities/address.entity";
 import { OneToMany } from "typeorm";
 
 export class CreateCustomerDto {

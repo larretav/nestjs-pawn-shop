@@ -1,6 +1,4 @@
-import { Type } from "class-transformer";
-import { IsIn, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator"
-import { CreateCustomerDto } from "src/customers/dto/create-customer.dto";
+import { IsIn, IsNotEmpty, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 
 export class CreateAddressDto {
 
@@ -39,9 +37,8 @@ export class CreateAddressDto {
   @IsNotEmpty({ message: '[country] no debe ser vacía' })
   @IsString({ message: '[country] debe ser un string' })
   country: string;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => CreateCustomerDto)
-  customer?: CreateCustomerDto;
+  
+  @IsNotEmpty({ message: '[customerId] no debe ser vacía' })
+  @IsUUID(undefined, { message: '[customerId] no es un uuid válido' })
+  customerId: string;
 }

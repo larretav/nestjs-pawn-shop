@@ -23,12 +23,12 @@ export class AddressesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
-    return this.addressesService.update(+id, updateAddressDto);
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateAddressDto: UpdateAddressDto) {
+    return this.addressesService.update(id, updateAddressDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.addressesService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.addressesService.remove(id);
   }
 }

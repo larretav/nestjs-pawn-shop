@@ -1,23 +1,35 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Addresses } from './entities/address.entity';
+import { Address } from './entities/address.entity';
 import { HandleExceptions } from 'src/common/exceptions/handleExceptions';
+import { CustomersService } from 'src/customers/customers.service';
 
 @Injectable()
 export class AddressesService {
 
   constructor(
-    @InjectRepository(Addresses)
-    private readonly addressRepository: Repository<Addresses>,
+    @InjectRepository(Address)
+    private readonly addressRepository: Repository<Address>,
+
+    private readonly customerService: CustomersService,
   ) { }
 
 
   async create(createAddressDto: CreateAddressDto) {
+
+    const { customerId, ...restCreateAddressDto } = createAddressDto;
+
     try {
-      const newAddress = this.addressRepository.create(createAddressDto);
+
+      const customer = await this.customerService.findByIdCURP(customerId)
+
+      if (!customer)
+        throw new NotFoundException('Cliente no encontrado. Es necesario un cliente existente para asignar la dirección');
+
+      const newAddress = this.addressRepository.create({ ...restCreateAddressDto, customer });
       const addressBd = await this.addressRepository.save(newAddress)
 
       return addressBd
@@ -45,7 +57,7 @@ export class AddressesService {
       const address = await this.findById(id);
 
       if (!address)
-        throw new NotFoundException('Cliente no encontrado');
+        throw new NotFoundException('Dirección no encontrada');
 
       return address;
 
@@ -55,7 +67,7 @@ export class AddressesService {
     }
   }
 
-  async findById(id: string): Promise<Addresses | null> {
+  async findById(id: string): Promise<Address | null> {
 
     if (!id) return null;
 
@@ -69,11 +81,35 @@ export class AddressesService {
     }
   }
 
-  update(id: number, updateAddressDto: UpdateAddressDto) {
-    return `This action updates a #${id} address`;
+  async update(id: string, updateAddressDto: UpdateAddressDto) {
+    try {
+
+      await this.findOne(id);
+
+      if (updateAddressDto?.customerId)
+        throw new BadRequestException('No puedes modificar el cliente de una dirección.');
+
+      const updateAddress = await this.addressRepository.preload({ id, ...updateAddressDto });
+      const addressBd = await this.addressRepository.save(updateAddress)
+
+      return addressBd
+
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} address`;
+  async remove(id: string) {
+    try {
+      await this.findOne(id);
+      await this.addressRepository.update({ id }, { status: 'I' });
+
+      return 'Cliente eliminado correctamente';
+
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 }
