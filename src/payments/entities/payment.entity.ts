@@ -3,7 +3,7 @@ import { Loan } from "src/loans/entities/loan.entity";
 import { Column, Entity, ManyToOne } from "typeorm";
 
 // Pagos
-@Entity({ name: 'payments' })
+@Entity({ name: 'payment' })
 export class Payment extends BaseEntity {
 
   @Column('decimal', { name: 'payment_amount', precision: 10, scale: 2 }) // (Monto pagado).

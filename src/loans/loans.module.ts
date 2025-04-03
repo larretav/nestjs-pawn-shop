@@ -9,8 +9,11 @@ import { Loan } from './entities/loan.entity';
   providers: [LoansService],
   imports: [
     TypeOrmModule.forFeature([
-      Loan, 
+      Loan,
     ])
   ],
+  exports: [
+    LoansService
+  ]
 })
-export class LoansModule {}
+export class LoansModule { }

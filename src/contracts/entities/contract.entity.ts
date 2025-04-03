@@ -5,7 +5,7 @@ import { Loan } from "src/loans/entities/loan.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne } from "typeorm"
 
-@Entity({ name: 'contracts' })
+@Entity({ name: 'contract' })
 export class Contract extends BaseEntity {
 
   @Index()

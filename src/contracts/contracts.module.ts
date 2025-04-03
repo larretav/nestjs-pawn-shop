@@ -6,6 +6,7 @@ import { Contract } from './entities/contract.entity';
 import { CustomersModule } from 'src/customers/customers.module';
 import { VehiclesModule } from 'src/vehicles/vehicles.module';
 import { AddressesModule } from 'src/addresses/addresses.module';
+import { LoansModule } from 'src/loans/loans.module';
 
 @Module({
   controllers: [ContractsController],
@@ -14,6 +15,7 @@ import { AddressesModule } from 'src/addresses/addresses.module';
     CustomersModule,
     VehiclesModule,
     AddressesModule,
+    LoansModule,
     TypeOrmModule.forFeature([
       Contract, 
     ])

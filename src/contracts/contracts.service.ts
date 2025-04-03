@@ -5,17 +5,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CustomersService } from 'src/customers/customers.service';
 import { VehiclesService } from 'src/vehicles/vehicles.service';
 import { AddressesService } from 'src/addresses/addresses.service';
+import { LoansService } from 'src/loans/loans.service';
+import { Contract } from './entities/contract.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ContractsService {
 
   constructor(
-    // @InjectRepository(Addresses)
-    // private readonly addressRepository: Repository<Addresses>,
+    @InjectRepository(Contract)
+    private readonly contractRepository: Repository<Contract>,
 
     private readonly customerService: CustomersService,
     private readonly addressService: AddressesService,
     private readonly vehicleService: VehiclesService,
+    private readonly loanService: LoansService,
+
+
   ) { }
 
   async create(createContractDto: CreateContractDto) {
@@ -32,43 +38,23 @@ export class ContractsService {
       addressEntity = await this.addressService.create({ ...address, customerId: customerEntity.id });
 
     // Crear o buscar vehículo
-    // let vehicleEntity = await this.vehicleService.findByTerm(address.id);
-    // if (!vehicleEntity)
-    //   vehicleEntity = await this.vehicleService.create();
-
+    let vehicleEntity = await this.vehicleService.findByTerm(vehicle.id);
+    if (!vehicleEntity)
+      vehicleEntity = await this.vehicleService.create({ ...vehicle, customerId: customerEntity.id });
 
     // Crear préstamo
+    const loanEntity = await this.loanService.create(loan);
 
     // Crear contrato
+    const contractEntity = this.contractRepository.create({
+      date: new Date(date),
+      contractStatus,
+      customer: customerEntity,
+      vehicle: Array.isArray(vehicleEntity) ? vehicleEntity[0] : vehicleEntity,
+      loan: loanEntity,
+    });
 
-
-    // let vehicleEntity = await this.vehicleRepository.findOne({
-    //   where: { make: vehicle.make, model: vehicle.model, year: vehicle.year },
-    // });
-    // if (!vehicleEntity) {
-    //   vehicleEntity = this.vehicleRepository.create({ ...vehicle, customer: customerEntity });
-    //   vehicleEntity = await this.vehicleRepository.save(vehicleEntity);
-    // }
-
-    // // Crear préstamo si se proporciona
-    // let loanEntity: Loan | undefined;
-    // if (loan) {
-    //   loanEntity = this.loanRepository.create(loan);
-    //   loanEntity = await this.loanRepository.save(loanEntity);
-    // }
-
-    // // Crear contrato
-    // const contractEntity = this.contractRepository.create({
-    //   folio,
-    //   date: new Date(date),
-    //   contractStatus,
-    //   customer: customerEntity,
-    //   vehicle: vehicleEntity,
-    //   loan: loanEntity,
-    // });
-
-    // return this.contractRepository.save(contractEntity);
-    return createContractDto
+    return this.contractRepository.save(contractEntity);
   }
 
   findAll() {

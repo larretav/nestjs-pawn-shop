@@ -14,13 +14,12 @@ export class LoansService {
     private readonly loanRepository: Repository<Loan>
   ) { }
 
-  create(createLoanDto: CreateLoanDto) {
+  async create(createLoanDto: CreateLoanDto) {
     try {
-      // const vehicle = this.vehicleRepository.create(createVehicleDto);
-      // await this.vehicleRepository.insert(vehicle);
+      const loan = this.loanRepository.create(createLoanDto);
+      const loanBd = await this.loanRepository.save(loan);
 
-      // return vehicle;
-      return createLoanDto;
+      return loanBd;
     } catch (error) {
       const exception = new HandleExceptions();
       exception.handleExceptions(error);

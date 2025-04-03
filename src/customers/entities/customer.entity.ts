@@ -4,7 +4,7 @@ import { Contract } from "src/contracts/entities/contract.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Column, Entity, OneToMany } from "typeorm"
 
-@Entity({ name: 'customers' })
+@Entity({ name: 'customer' })
 export class Customer extends BaseEntity {
 
   @Column('text', { name: 'first_name' })

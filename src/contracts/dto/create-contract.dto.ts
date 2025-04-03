@@ -24,12 +24,6 @@ class ExtendedCreateVehicleDto extends CreateVehicleDto {
   id?: string
 }
 
-class ExtendedCreateLoanDto extends CreateLoanDto {
-  @IsOptional()
-  @IsUUID(undefined, {message: "Se esperaba un uuid"})
-  id?: string
-}
-
 export class CreateContractDto {
 
   @IsNotEmpty({ message: '[date] no debe ser vacío.' })
@@ -56,9 +50,9 @@ export class CreateContractDto {
   @Type(() => ExtendedCreateVehicleDto)
   vehicle: ExtendedCreateVehicleDto;
 
-  @IsOptional()
+  @IsNotEmpty({ message: '[loan] no debe ser vacío.' })
   @ValidateNested()
-  @Type(() => ExtendedCreateLoanDto)
-  loan?: ExtendedCreateLoanDto;
+  @Type(() => CreateLoanDto)
+  loan: CreateLoanDto;
 }
 

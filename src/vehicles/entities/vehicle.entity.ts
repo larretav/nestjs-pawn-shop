@@ -4,7 +4,7 @@ import { Customer } from "src/customers/entities/customer.entity";
 import { Maintenance } from "src/maintenance/entities/maintenance.entity";
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm"
 
-@Entity({ name: 'vehicles' })
+@Entity({ name: 'vehicle' })
 export class Vehicle extends BaseEntity {
 
   @Column('text')

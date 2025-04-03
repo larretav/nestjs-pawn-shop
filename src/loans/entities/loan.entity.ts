@@ -5,7 +5,7 @@ import { Payment } from "src/payments/entities/payment.entity";
 import { Column, Entity, ManyToOne, OneToMany, OneToOne } from "typeorm";
 
 // Prestamos
-@Entity({ name: 'loans' })
+@Entity({ name: 'loan' })
 export class Loan extends BaseEntity {
 
   @Column('decimal', { name: 'principal_amount', precision: 10, scale: 2 }) // (Monto principal del préstamo).

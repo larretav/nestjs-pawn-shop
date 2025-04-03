@@ -6,18 +6,30 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Vehicle } from './entities/vehicle.entity';
 import { ILike, Repository } from 'typeorm';
 import { isUUID } from 'class-validator';
+import { CustomersService } from 'src/customers/customers.service';
 
 @Injectable()
 export class VehiclesService {
 
   constructor(
     @InjectRepository(Vehicle)
-    private readonly vehicleRepository: Repository<Vehicle>
+    private readonly vehicleRepository: Repository<Vehicle>,
+
+    private readonly customerService: CustomersService
   ) { }
 
   async create(createVehicleDto: CreateVehicleDto) {
+
+    const { customerId, ...restCreateVehicleDto } = createVehicleDto;
+
     try {
-      const vehicle = this.vehicleRepository.create(createVehicleDto);
+
+      const customer = await this.customerService.findByIdCURP(customerId);
+
+      if (!customer)
+        throw new NotFoundException('Cliente no encontrado. Es necesario un cliente existente para asignar el vehículo');
+
+      const vehicle = this.vehicleRepository.create({...restCreateVehicleDto, customer});
       const vehicleBd = await this.vehicleRepository.save(vehicle);
 
       return vehicleBd;
@@ -43,10 +55,10 @@ export class VehiclesService {
 
       const vehicle = await this.findByTerm(id);
 
-      if (vehicle.length === 0)
+      if (!vehicle)
         throw new NotFoundException('Vehículo no encontrado')
 
-      return vehicle[0];
+      return vehicle;
     } catch (error) {
       const exception = new HandleExceptions();
       exception.handleExceptions(error);
@@ -84,19 +96,21 @@ export class VehiclesService {
   }
 
   async findByTerm(term: string) {
+
+    if (!term) return null;
+
     try {
 
-      let vehicles = isUUID(term) ? await this.vehicleRepository.findBy({ id: term, status: 'A' }) : null;
+      if (isUUID(term))
+        return await this.vehicleRepository.findOneBy({ id: term, status: 'A' });
 
-      if (!vehicles)
-        vehicles = await this.vehicleRepository.find({
-          where: [
-            { make: ILike(`%${term}%`), status: 'A' },
-            { model: ILike(`%${term}%`), status: 'A' }
-          ]
-        });
+      return await this.vehicleRepository.find({
+        where: [
+          { make: ILike(`%${term}%`), status: 'A' },
+          { model: ILike(`%${term}%`), status: 'A' }
+        ]
+      });
 
-      return vehicles;
     } catch (error) {
       const exception = new HandleExceptions();
       exception.handleExceptions(error);

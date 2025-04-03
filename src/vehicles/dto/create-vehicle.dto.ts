@@ -1,9 +1,9 @@
-import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from "class-validator";
+import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from "class-validator";
 
 
 const currentYear: number = new Date().getUTCFullYear() + 1;
 
-export class CreateVehicleDto { 
+export class CreateVehicleDto {
 
   @IsNotEmpty({ message: '[make] no debe ser vacío' })
   @IsString({ message: '[make] debe ser una cadena' })
@@ -33,5 +33,9 @@ export class CreateVehicleDto {
   @IsNotEmpty({ message: '[maintenanceCosts] no debe ser vacío' })
   @IsNumber(undefined, { message: '[maintenanceCosts] debe ser un número' })
   maintenanceCosts?: number;
+
+  @IsNotEmpty({ message: '[customerId] no debe ser vacía' })
+  @IsUUID(undefined, { message: '[customerId] no es un uuid válido' })
+  customerId: string;
 
 }
