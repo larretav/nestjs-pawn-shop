@@ -1,3 +1,5 @@
+import { applyDecorators } from "@nestjs/common";
+import { OmitType } from "@nestjs/mapped-types";
 import { Type } from "class-transformer";
 import { IsISO8601, IsNotEmpty, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
 import { CreateAddressDto } from "src/addresses/dto/create-address.dto";
@@ -5,22 +7,26 @@ import { CreateCustomerDto } from "src/customers/dto/create-customer.dto";
 import { CreateLoanDto } from "src/loans/dto/create-loan.dto";
 import { CreateVehicleDto } from "src/vehicles/dto/create-vehicle.dto";
 
+function OptionalId() {
+  return applyDecorators(
+    IsOptional(),
+    IsUUID('4', { message: "Se esperaba un uuid" })
+  )
+}
+
 
 class ExtendedCreateCustomerDto extends CreateCustomerDto {
-  @IsOptional()
-  // @IsUUID(undefined, {message: "Se esperaba un uuid"})
+  @OptionalId()
   id?: string
 }
 
-class ExtendedCreateAddressDto extends CreateAddressDto {
-  @IsOptional()
-  @IsUUID(undefined, {message: "Se esperaba un uuid"})
+class ExtendedCreateAddressDto extends OmitType(CreateAddressDto, ['customerId'] as const) {
+  @OptionalId()
   id?: string
 }
 
-class ExtendedCreateVehicleDto extends CreateVehicleDto {
-  @IsOptional()
-  @IsUUID(undefined, {message: "Se esperaba un uuid"})
+class ExtendedCreateVehicleDto extends OmitType(CreateVehicleDto, ['customerId'] as const) {
+  @OptionalId()
   id?: string
 }
 

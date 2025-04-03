@@ -8,6 +8,7 @@ import { AddressesService } from 'src/addresses/addresses.service';
 import { LoansService } from 'src/loans/loans.service';
 import { Contract } from './entities/contract.entity';
 import { Repository } from 'typeorm';
+import { HandleExceptions } from 'src/common/exceptions/handleExceptions';
 
 @Injectable()
 export class ContractsService {
@@ -55,10 +56,16 @@ export class ContractsService {
     });
 
     return this.contractRepository.save(contractEntity);
+    // return createContractDto
   }
 
-  findAll() {
-    return `This action returns all contracts`;
+  async findAll() {
+    try {
+      return await this.contractRepository.findBy({ status: 'A' })
+    } catch (error) {
+      const exception = new HandleExceptions();
+      exception.handleExceptions(error);
+    }
   }
 
   findOne(id: number) {
